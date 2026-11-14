@@ -1,0 +1,383 @@
+// Elegant Theme
+// One accent, one sidebar surface, one page surface. Change --et-accent (or the
+// Elegant Theme Settings DocType) and buttons, links, focus, tabs, and the
+// sidebar highlight follow. Desk markup this targets is Frappe v16.55:
+// .body-sidebar, .es-button[data-variant="solid"], .page-container, .page-head.
+
+@font-face {
+	font-family: "InterVariable";
+	font-style: normal;
+	font-weight: 100 900;
+	font-display: swap;
+	src: url("/assets/frappe/css/fonts/inter/InterVariable.woff2") format("woff2");
+}
+
+:root {
+	// #0F766E is teal-700: white text on it is about 5.5:1 (WCAG AA).
+	--et-accent: #0f766e;
+	--et-accent-hover: #115e59;
+	--et-accent-active: #134e4a;
+	--et-on-accent: #ffffff;
+	--et-accent-soft: #e7f5f3;
+	--et-accent-muted: #99f6e4;
+	--et-accent-text: #0f766e;
+	--et-accent-rgb: 15, 118, 110;
+	--et-focus-ring: 0 0 0 3px rgba(15, 118, 110, 0.35);
+
+	// Deep teal-slate. Light text on this surface is well above 4.5:1.
+	--et-sidebar-bg: #0c1c20;
+	--et-sidebar-hover: rgba(153, 246, 228, 0.12);
+	--et-sidebar-active: rgba(45, 212, 191, 0.18);
+	--et-sidebar-text: #f3fbfa;
+	--et-sidebar-muted: #b7d4d0;
+	--et-sidebar-faint: #8fb3ae;
+	--et-sidebar-border: rgba(255, 255, 255, 0.08);
+
+	--et-page-bg: #f4f6f5;
+	--et-card-bg: #ffffff;
+	--et-shadow: 0 1px 2px rgba(12, 28, 32, 0.05), 0 10px 28px rgba(12, 28, 32, 0.05);
+	--et-shadow-lg: 0 16px 40px rgba(12, 28, 32, 0.12);
+
+	--radius-sm: 6px;
+	--radius: 10px;
+	--radius-md: 12px;
+	--radius-lg: 14px;
+	--radius-xl: 18px;
+
+	// Frappe still reads these names. Point them at the single accent.
+	--primary: var(--et-accent);
+	--primary-color: var(--et-accent);
+	--brand-color: var(--et-accent);
+	--btn-primary: var(--et-accent);
+	--border-primary: var(--et-accent);
+	--progress-bar-bg: var(--et-accent);
+	--date-active-bg: var(--et-accent);
+	--date-active-text: var(--et-on-accent);
+	--focus-default: var(--et-focus-ring);
+	--focus-outline-default: 2px solid var(--et-accent);
+	--desk-sidebar-bg: var(--et-sidebar-bg);
+	--checkbox-gradient: linear-gradient(180deg, var(--et-accent) 0%, var(--et-accent-active) 100%);
+}
+
+// On a dark desk, keep the deep teal buttons and use a lighter teal for text.
+[data-theme="dark"] {
+	--primary: var(--et-accent-muted);
+	--primary-color: var(--et-accent-muted);
+	--et-accent-text: var(--et-accent-muted);
+	--btn-primary: var(--et-accent);
+	--desk-sidebar-bg: var(--et-sidebar-bg);
+}
+
+// ---------------------------------------------------------------------------
+// Light desk canvas. Tokens such as --bg-color stay untouched: list sticky
+// columns, child tables, kanban, and print still read Frappe's own surfaces.
+// ---------------------------------------------------------------------------
+
+html:not([data-theme="dark"]) body:has(.body-sidebar),
+html:not([data-theme="dark"]) body:has(.body-sidebar) .main-section,
+html:not([data-theme="dark"]) body:has(.body-sidebar) .page-container {
+	background-color: var(--et-page-bg);
+}
+
+html:not([data-theme="dark"]) body:has(.body-sidebar) .page-head {
+	background: var(--et-card-bg);
+	border-bottom-color: rgba(12, 28, 32, 0.08);
+}
+
+html:not([data-theme="dark"]) .layout-main-section.frappe-card,
+html:not([data-theme="dark"]) .std-form-layout > .form-layout > .form-page,
+html:not([data-theme="dark"]) .widget.border,
+html:not([data-theme="dark"]) .widget.number-widget-box,
+html:not([data-theme="dark"]) .widget.shortcut-widget-box {
+	background-color: var(--et-card-bg);
+}
+
+html:not([data-theme="dark"]) .layout-main-section.frappe-card {
+	border: 1px solid rgba(12, 28, 32, 0.06);
+	border-radius: var(--radius-lg);
+	box-shadow: var(--et-shadow);
+}
+
+// ---------------------------------------------------------------------------
+// Sidebar. Local surface tokens restyle Frappe's hover mixin without touching
+// the rest of the desk. Menus opened from the sidebar keep a light surface.
+// ---------------------------------------------------------------------------
+
+.body-sidebar {
+	--surface-gray-2: var(--et-sidebar-hover);
+	--surface-gray-3: var(--et-sidebar-hover);
+	--surface-elevation-2: var(--et-sidebar-active);
+	--surface-elevation-3: var(--et-sidebar-active);
+	--outline-gray-1: var(--et-sidebar-border);
+	--outline-gray-2: var(--et-sidebar-border);
+	background: var(--et-sidebar-bg);
+	border-right: 1px solid var(--et-sidebar-border);
+	color: var(--et-sidebar-text);
+}
+
+.body-sidebar .standard-sidebar-item .item-anchor,
+.body-sidebar .sidebar-item-icon {
+	color: var(--et-sidebar-muted);
+}
+
+.body-sidebar .section-break .sidebar-item-label {
+	color: var(--et-sidebar-faint);
+	font-weight: 600;
+}
+
+.body-sidebar .standard-sidebar-item.active-sidebar {
+	background: var(--et-sidebar-active);
+	border-radius: var(--radius);
+}
+
+.body-sidebar .standard-sidebar-item.active-sidebar .item-anchor,
+.body-sidebar .standard-sidebar-item.active-sidebar .sidebar-item-icon,
+.body-sidebar-container:not(.expanded)
+	.sidebar-item-container:has(> .nested-container.hidden .active-sidebar)
+	> .standard-sidebar-item
+	.item-anchor {
+	color: var(--et-accent-muted);
+}
+
+.body-sidebar .shell-header,
+.body-sidebar .header-title,
+.body-sidebar .drop-icon,
+.body-sidebar .sidebar-user-button .avatar-name-email span {
+	color: var(--et-sidebar-text);
+}
+
+.body-sidebar .sidebar-user-button .avatar-name-email span + span,
+.body-sidebar .header-subtitle {
+	color: var(--et-sidebar-muted);
+}
+
+.body-sidebar .header-logo img {
+	background-color: rgba(255, 255, 255, 0.1);
+}
+
+.body-sidebar .divider {
+	border-top-color: var(--et-sidebar-border);
+}
+
+.body-sidebar .dropdown-menu {
+	background: var(--et-card-bg);
+	color: #171717;
+	border-radius: var(--radius);
+}
+
+.body-sidebar .dropdown-menu .dropdown-item {
+	color: #171717;
+}
+
+.sidebar-collapse-arrow {
+	background: var(--et-sidebar-bg);
+	border-color: rgba(255, 255, 255, 0.16);
+	color: var(--et-sidebar-text);
+}
+
+.sidebar-collapse-arrow:hover {
+	background: var(--et-accent);
+	color: var(--et-on-accent);
+}
+
+.dock {
+	--dock-ink: var(--et-sidebar-muted);
+	--dock-ink-hover: var(--et-sidebar-text);
+	--dock-ink-active: var(--et-accent-muted);
+	background: var(--et-sidebar-bg);
+	color: var(--et-sidebar-text);
+}
+
+// ---------------------------------------------------------------------------
+// Accent on controls. Solid espresso buttons are the v16 primary action.
+// ---------------------------------------------------------------------------
+
+.es-button[data-variant="solid"]:not([data-theme="red"]) {
+	--bt-solid-bg: var(--et-accent);
+	--bt-solid-bg-hover: var(--et-accent-hover);
+	--bt-solid-bg-active: var(--et-accent-active);
+	--bt-solid-fg: var(--et-on-accent);
+}
+
+.btn.btn-primary,
+.btn.btn-primary:hover,
+.btn.btn-primary:focus,
+.btn.btn-primary:focus-visible {
+	background-color: var(--et-accent);
+	border-color: transparent;
+	color: var(--et-on-accent);
+}
+
+.btn.btn-primary:hover,
+.btn.btn-primary:focus-visible {
+	background-color: var(--et-accent-hover);
+}
+
+// Frappe sets .btn:active and .btn-primary:active with !important.
+.btn.btn-primary:active {
+	background-color: var(--et-accent-active) !important;
+	color: var(--et-on-accent) !important;
+}
+
+.btn,
+.es-button,
+.form-control,
+.modal-content,
+.dropdown-menu {
+	transition: background-color 150ms ease, border-color 150ms ease, box-shadow 150ms ease,
+		color 150ms ease;
+}
+
+.form-control:focus,
+.form-control:focus-visible,
+.awesomplete > input:focus,
+input:focus-visible,
+select:focus-visible,
+textarea:focus-visible {
+	border-color: var(--et-accent);
+	box-shadow: var(--et-focus-ring);
+	outline: none;
+}
+
+.es-button:focus-visible,
+.btn:focus-visible {
+	box-shadow: var(--et-focus-ring);
+}
+
+.layout-main-section a:not(.btn):not(.es-button):not(.dropdown-item):not(.es-badge),
+.ql-editor a,
+.form-links .link-item,
+.widget.links-widget-box .link-item {
+	color: var(--et-accent-text);
+}
+
+.layout-main-section a:not(.btn):not(.es-button):not(.dropdown-item):hover,
+.widget.links-widget-box .link-item:hover {
+	color: var(--et-accent-hover);
+}
+
+.form-tabs-list .form-tabs .nav-item .nav-link.active {
+	color: var(--et-accent-text);
+	border-bottom-color: var(--et-accent);
+	font-weight: 600;
+}
+
+.form-section > .section-head {
+	font-weight: 600;
+	letter-spacing: 0.01em;
+}
+
+.form-section > .section-head::before {
+	content: "";
+	display: inline-block;
+	width: 3px;
+	height: 0.85em;
+	margin-right: 8px;
+	border-radius: 99px;
+	background: var(--et-accent);
+	vertical-align: -1px;
+}
+
+.form-grid .section-head::before,
+.form-section.empty-section > .section-head::before {
+	content: none;
+}
+
+.widget.number-widget-box {
+	box-shadow: inset 3px 0 0 var(--et-accent);
+	border-radius: var(--radius-lg);
+}
+
+.widget.shortcut-widget-box {
+	border-radius: var(--radius-lg);
+}
+
+.widget.shortcut-widget-box:hover {
+	border-color: var(--et-accent);
+	box-shadow: var(--et-shadow);
+}
+
+.list-row-container:hover,
+.list-row:hover .level-right {
+	background-color: var(--et-accent-soft);
+}
+
+[data-theme="dark"] .list-row-container:hover,
+[data-theme="dark"] .list-row:hover .level-right {
+	background-color: rgba(15, 118, 110, 0.16);
+}
+
+.modal-content {
+	border: none;
+	border-radius: var(--radius-lg);
+	box-shadow: var(--et-shadow-lg);
+}
+
+.dropdown-menu,
+.awesomplete > ul {
+	border-radius: var(--radius);
+	box-shadow: var(--et-shadow);
+}
+
+// Printed documents keep neutral ink. The preview iframe usually does not load
+// this file; this reset covers an inline print format.
+.print-format {
+	--primary: #171717;
+	--primary-color: #171717;
+	--btn-primary: #171717;
+	--et-accent: #171717;
+	--et-accent-text: #171717;
+	--progress-bar-bg: #171717;
+	background: #fff;
+	color: #171717;
+}
+
+// ---------------------------------------------------------------------------
+// Login / signup / reset. The desk sidebar is not on these pages.
+// ---------------------------------------------------------------------------
+
+body:has(.for-login),
+body:has(.for-signup),
+body:has(.for-forgot),
+body:has(.for-email-login),
+body:has(.for-login-with-email-link),
+body:has(.for-reset-password) {
+	background-color: var(--et-page-bg);
+	background-image: radial-gradient(
+		900px 420px at 50% -80px,
+		rgba(var(--et-accent-rgb), 0.18),
+		transparent 62%
+	);
+	font-family: var(--et-font, var(--font-stack));
+}
+
+.for-login .page-card,
+.for-signup .page-card,
+.for-forgot .page-card,
+.for-email-login .page-card,
+.for-login-with-email-link .page-card,
+.for-reset-password .page-card {
+	background: var(--et-card-bg);
+	border: 1px solid rgba(var(--et-accent-rgb), 0.16);
+	border-top: 3px solid var(--et-accent);
+	border-radius: 16px;
+	box-shadow: var(--et-shadow-lg);
+}
+
+.for-login .page-card-body input[type="text"],
+.for-login .page-card-body input[type="email"],
+.for-login .page-card-body input[type="password"],
+.for-signup .page-card-body input,
+.for-forgot .page-card-body input,
+.for-email-login .page-card-body input,
+.for-reset-password .page-card-body input {
+	height: 36px;
+	border-radius: var(--radius);
+}
+
+.for-login .page-card a,
+.for-signup .page-card a,
+.for-forgot .page-card a,
+.for-reset-password .page-card a {
+	color: var(--et-accent-text);
+}

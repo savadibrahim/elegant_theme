@@ -1,0 +1,26 @@
+[project]
+name = "elegant_theme"
+authors = [
+    { name = "savadibrahim" }
+]
+description = "Dark sidebar and teal accents for the Frappe v16 / ERPNext v16 desk"
+requires-python = ">=3.14"
+readme = "README.md"
+license = "MIT"
+dynamic = ["version"]
+dependencies = []
+
+[project.urls]
+Homepage = "https://github.com/savadibrahim/elegant_theme"
+Repository = "https://github.com/savadibrahim/elegant_theme"
+
+[build-system]
+requires = ["flit_core >=3.4,<4"]
+build-backend = "flit_core.buildapi"
+
+[tool.flit.module]
+name = "elegant_theme"
+
+# Frappe v16.55 is the version this theme was built and checked against.
+[tool.bench.frappe-dependencies]
+frappe = ">=16.55.0,<17.0.0"
